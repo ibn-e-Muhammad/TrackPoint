@@ -1,0 +1,96 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 40px;
+
+  margin: 0;
+  background-image: url("img\ 3.jpg");
+  background-size: cover;
+}
+header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 33px 9%;
+  background: transparent;
+}
+
+.logo {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 60px;
+  font-weight: 700;
+  color: whitesmoke;
+}
+.navelist {
+  display: flex;
+  z-index: 1000;
+}
+.navelist a {
+  color: white;
+  margin-left: 60px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: all 0.55s ease;
+}
+.navelist a:hover {
+  border-bottom: 2px solid white;
+}
+#menu-icon {
+  color: white;
+  font-size: 35px;
+  z-index: 10001;
+  display: none;
+}
+
+@media (max-width: 1535px) {
+  header {
+    padding: 15px 3%;
+    transition: 0.2s;
+  }
+}
+@media (max-width: 990px) {
+  #menu-icon {
+    display: block;
+  }
+  .navelist {
+    position: absoLute;
+    top: 6%;
+    right: -100%;
+    width: 300px;
+    height: 40vh;
+    background: #523553;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px 20px;
+    transition: aLL 0.55s ease;
+  }
+  .navelist a {
+    display: block;
+    margin: 8px 0;
+    margin-left: 0;
+  }
+  .navelist.open {
+    right: 0;
+  }
+}
+#map {
+  width: 90%;
+  height: 90vh;
+  margin: 50px auto;
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackPoint Map</title>
+    <link rel="stylesheet" href="map.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+
+    <!-- leaflet css  -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Montserrat&family=Montserrat+Alternates&family=Nanum+Brush+Script&family=Permanent+Marker&family=Poppins&display=swap"
+      rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <a href="landingPage.html" class="logo">Track Point</a>
+      <ul class="navelist">
+        <li><a href="landingPage.html">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="complaint.html">Complaints</a></li>
+        <li><a href="request.html">Request Point</a></li>
+      </ul>
+      <div class="bx bx-menu" id="menu-icon"></div>
+    </header>
+    <div id="map"></div>
+  </body>
+</html>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+  let menu = document.querySelector("#menu-icon");
+  let navelist = document.querySelector(".navelist");
+  menu.onclick = () => {
+    menu.classList.toggle("bx-x");
+    navelist.classList.toggle("open");
+  };
+</script>
+<!-- firebase and map js -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+  import {
+    getDatabase,
+    ref,
+    set,
+    onValue,
+  } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeH5NYqjKvFHNw5b5JbPfyr7CMvED0ucw",
+    authDomain: "trackpoint-ac228.firebaseapp.com",
+    databaseURL: "https://trackpoint-ac228-default-rtdb.firebaseio.com",
+    projectId: "trackpoint-ac228",
+    storageBucket: "trackpoint-ac228.appspot.com",
+    messagingSenderId: "945635742333",
+    appId: "1:945635742333:web:7f8443ff20a56989ff9714",
+    measurementId: "G-87K2VRQN85",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase();
+  // Map initialization
+  var map = L.map("map").setView([25.3996309, 68.3391878], 10);
+  // map = L.map("map").Zoom(2);
+
+  //osm layer
+  var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  });
+  osm.addTo(map);
+
+  //funtion to retrieve the driver location from the data base
+  function fetchDriverLocations() {
+    var marker, circle;
+    // Reference to the 'driverLocations' node in the database
+    const driverLocationsRef = ref(db, "driverLocations");
+    var markerCircle = [];
+
+    // Listen for changes in the driver locations
+
+    onValue(driverLocationsRef, (snapshot) => {
+      // Iterate through the snapshot and add markers for each driver
+      snapshot.forEach((busNumberSnapshot) => {
+        const busNumber = busNumberSnapshot.key; // Get the bus number
+        const driverData = busNumberSnapshot.val();
+        console.log(`Bus Number: ${busNumber}`);
+        const driverMarker = L.marker([
+          driverData.lat,
+          driverData.long,
+          driverData.acc,
+        ]);
+        if (markerCircle.hasOwnProperty(busNumber)) {
+          map.removeLayer(markerCircle[busNumber][0]);
+          map.removeLayer(markerCircle[busNumber][1]);
+        }
+        marker = L.marker([driverData.lat, driverData.long]);
+        circle = L.circle([driverData.lat, driverData.long], {
+          radius: driverData.acc,
+        });
+        markerCircle[busNumber] = Array(marker, circle);
+        marker.bindPopup(`Bus Number: ${busNumber}`).openPopup();
+
+        var featureGroup = L.featureGroup([marker, circle]).addTo(map);
+
+        // map.fitBounds(featureGroup.getBounds());
+
+        console.log(
+          "Your driver's coordinate is: Lat: " +
+            driverData.lat +
+            " Long: " +
+            driverData.long +
+            " Accuracy: " +
+            driverData.acc
+        );
+      });
+      console.log(markerCircle);
+    });
+  }
+  fetchDriverLocations();
+</script>

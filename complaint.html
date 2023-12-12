@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>TrackPoint Complaint Page</title>
+    <link rel="stylesheet" href="request.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Montserrat&family=Montserrat+Alternates&family=Nanum+Brush+Script&family=Permanent+Marker&family=Poppins&display=swap"
+      rel="stylesheet" />
+  </head>
+  <body>
+    <a href="landingPage.html" class="logo">Trackpoint</a>
+    <div class="container bg-opacity-80 bg-[#1A0444]">
+      <div class="text">Complain Details</div>
+      <form action="#">
+        <div class="form-row">
+          <div class="input-data name">
+            <input type="text" required />
+            <div class="underline"></div>
+            <label for="">Full Name</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data email">
+            <input type="email" required />
+            <div class="underline"></div>
+            <label for="">Email Address</label>
+          </div>
+          <div class="input-data rollNumber">
+            <input type="text" required />
+            <div class="underline"></div>
+            <label for="">Roll Number</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data textarea">
+            <textarea rows="8" cols="80" required></textarea>
+            <br />
+            <div class="underline complain"></div>
+            <label for="">Write your complain</label>
+            <br />
+            <div class="form-row submit-btn">
+              <div class="input-data">
+                <div class="inner"></div>
+                <input type="submit" onclick="sendwhatsapp()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      let menu = document.querySelector("#menu-icon");
+      let navelist = document.querySelector(".navelist");
+      menu.onclick = () => {
+        menu.classList.toggle("bx-x");
+        navelist.classList.toggle("open");
+      };
+      function sendwhatsapp() {
+        console.log(
+          "i was clicked and your fucking code does not send whatsapp msgs"
+        );
+        var phonenumber = "+923123089270";
+
+        var name = document.querySelector(".input-data.name input").value;
+        var email = document.querySelector(".input-data.email input").value;
+        var rollNumber = document.querySelector(
+          ".input-data.rollNumber input"
+        ).value;
+       
+        var request = document.querySelector(
+          ".input-data.textarea textarea"
+        ).value;
+
+        var url =
+          "https://wa.me/" +
+          phonenumber +
+          "?text=" +
+          "*Name :* " +
+          name +
+          "%0a" +
+          "*Email :* " +
+          email +
+          "%0a" +
+          "*rollNumber:* " +
+          rollNumber +
+          "%0a" +
+          "*Entered Complaint :* " +
+          request +
+          "%0a%0a";
+
+        window.open(url, "_blank").focus();
+      }
+    </script>
+  </body>
+</html>
